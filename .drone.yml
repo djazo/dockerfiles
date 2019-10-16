@@ -1,21 +1,46 @@
+---
 kind: pipeline
 type: docker
-name: avr-toolchain-beta
+name: avr
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: version
-  commands:
-    - cat avr-toolchain/VERSION > .tags
-- name: build-beta
-  image: plugins/docker
-  settings:
-    repo: embeddedreality/avr-toolchain
-    dockerfile: avr-toolchain/Dockerfile
-    username:
-      from_secret: repo_username
-    password:
-      from_secret: repo_password
+  - name: version
+    commands:
+      - cat avr-toolchain/VERSION > .tags
+  - name: build-beta
+    image: plugins/docker
+    settings:
+      repo: embeddedreality/avr-toolchain
+      dockerfile: avr-toolchain/Dockerfile
+      username:
+        from_secret: repo_username
+      password:
+        from_secret: repo_password
+
+---
+kind: pipeline
+type: docker
+name: arm
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: version
+    commands:
+      - cat arm-toolchain/VERSION > .tags
+  - name: build-beta
+    image: plugins/docker
+    settings:
+      repo: embeddedreality/arm-toolchain
+      dockerfile: arm-toolchain/Dockerfile
+      username:
+        from_secret: repo_username
+      password:
+        from_secret: repo_password
+    
