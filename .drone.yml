@@ -1,5 +1,6 @@
 ---
 kind: pipeline
+type: docker
 name: avr-toolchain-beta
 
 platform:
@@ -19,7 +20,3 @@ steps:
         from_secret: repo_username
       password:
         from_secret: repo_password
-
-trigger:
-  branch:
-    - master
