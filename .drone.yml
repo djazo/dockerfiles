@@ -9,6 +9,7 @@ platform:
 
 steps:
   - name: version
+    image: busybox
     commands:
       - cat avr-toolchain/VERSION > .tags
   - name: build-beta
@@ -32,6 +33,7 @@ platform:
 
 steps:
   - name: version
+    image: busybox
     commands:
       - cat arm-toolchain/VERSION > .tags
   - name: build-beta
