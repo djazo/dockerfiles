@@ -9,7 +9,8 @@ RUN apk add --no-cache \
 	file \
 	flex \
 	git \
-	ninja
+	ninja \
+	python3
 
 ENV LLVM_VERSION 9.0.0
 
@@ -23,10 +24,11 @@ RUN mkdir -p /tmp/src ; \
 
 RUN mkdir -p /tmp/build ; \
 	cd /tmp/build ; \
-	cmake -G Ninja /tmp/src/llvm-project \
+	cmake -G Ninja /tmp/src/llvm-project/llvm \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_INSTALL_PREFIX=/opt/toolchain \
-	-DLLVM_TARGETS_TO_BUILD=AArch64;ARM
+	-DLLVM_TARGETS_TO_BUILD="AArch64;ARM" \
+	-DLLVM_ENABLE_PROJECTS="clang;lld;lldb"
 
 # build
 
