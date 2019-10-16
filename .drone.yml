@@ -10,13 +10,12 @@ steps:
 - name: version
   commands:
     - cat avr-toolchain/VERSION > .tags
-    - echo "FOO!"
-# - name: build-beta
-#   image: plugins/docker
-#   settings:
-#     repo: embeddedreality/avr-toolchain
-#     dockerfile: avr-toolchain/Dockerfile
-#     username:
-#       from_secret: repo_username
-#     password:
-#       from_secret: repo_password
+- name: build-beta
+  image: plugins/docker
+  settings:
+    repo: embeddedreality/avr-toolchain
+    dockerfile: avr-toolchain/Dockerfile
+    username:
+      from_secret: repo_username
+    password:
+      from_secret: repo_password
