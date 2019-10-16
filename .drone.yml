@@ -25,79 +25,79 @@ trigger:
   branch:
     - master
       
----
-kind: pipeline
-type: docker
-name: avr-toolchain-release
+# ---
+# kind: pipeline
+# type: docker
+# name: avr-toolchain-release
 
-platform:
-  os: linux
-  arch: amd64
+# platform:
+#   os: linux
+#   arch: amd64
 
-steps:
-  - name: build-release
-    image: plugins/docker
-    settings:
-      repo: embeddedreality/avr-toolchain
-      dockerfile: avr-toolchain/Dockerfile
-      username:
-        from_secret: repo_username
-      password:
-        from_secret: repo_password
-      auto_tag: true
+# steps:
+#   - name: build-release
+#     image: plugins/docker
+#     settings:
+#       repo: embeddedreality/avr-toolchain
+#       dockerfile: avr-toolchain/Dockerfile
+#       username:
+#         from_secret: repo_username
+#       password:
+#         from_secret: repo_password
+#       auto_tag: true
 
-trigger:
-  event:
-    - tag
+# trigger:
+#   event:
+#     - tag
 
----
-kind: pipeline
-type: docker
-name: arm-toolchain-beta
+# ---
+# kind: pipeline
+# type: docker
+# name: arm-toolchain-beta
 
-platform:
-  os: linux
-  arch: amd64
+# platform:
+#   os: linux
+#   arch: amd64
 
-steps:
-  - name: version
-    commands:
-      - cat arm-toolchain/VERSION > .tags
-  - name: build-beta
-    image: plugins/docker
-    settings:
-      repo: embeddedreality/arm-toolchain
-      dockerfile: arm-toolchain/Dockerfile
-      username:
-        from_secret: repo_username
-      password:
-        from_secret: repo_password
+# steps:
+#   - name: version
+#     commands:
+#       - cat arm-toolchain/VERSION > .tags
+#   - name: build-beta
+#     image: plugins/docker
+#     settings:
+#       repo: embeddedreality/arm-toolchain
+#       dockerfile: arm-toolchain/Dockerfile
+#       username:
+#         from_secret: repo_username
+#       password:
+#         from_secret: repo_password
 
-trigger:
-  branch:
-    - master
+# trigger:
+#   branch:
+#     - master
       
----
-kind: pipeline
-type: docker
-name: arm-toolchain-release
+# ---
+# kind: pipeline
+# type: docker
+# name: arm-toolchain-release
 
-platform:
-  os: linux
-  arch: amd64
+# platform:
+#   os: linux
+#   arch: amd64
 
-steps:
-  - name: build-release
-    image: plugins/docker
-    settings:
-      repo: embeddedreality/arm-toolchain
-      dockerfile: arm-toolchain/Dockerfile
-      username:
-        from_secret: repo_username
-      password:
-        from_secret: repo_password
-      auto_tag: true
+# steps:
+#   - name: build-release
+#     image: plugins/docker
+#     settings:
+#       repo: embeddedreality/arm-toolchain
+#       dockerfile: arm-toolchain/Dockerfile
+#       username:
+#         from_secret: repo_username
+#       password:
+#         from_secret: repo_password
+#       auto_tag: true
 
-trigger:
-  event:
-    - tag
+# trigger:
+#   event:
+#     - tag
