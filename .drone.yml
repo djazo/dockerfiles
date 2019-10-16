@@ -1,5 +1,6 @@
 ---
 kind: pipeline
+type: docker
 name: avr-toolchain-beta
 
 platform:
@@ -26,6 +27,7 @@ trigger:
       
 ---
 kind: pipeline
+type: docker
 name: avr-toolchain-release
 
 platform:
@@ -50,6 +52,7 @@ trigger:
 
 ---
 kind: pipeline
+type: docker
 name: arm-toolchain-beta
 
 platform:
@@ -76,6 +79,7 @@ trigger:
       
 ---
 kind: pipeline
+type: docker
 name: arm-toolchain-release
 
 platform:
