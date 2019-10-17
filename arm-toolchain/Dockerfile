@@ -37,7 +37,7 @@ RUN cd /tmp/build ; \
 
 # install
 
-RUN cd /tmp/build;
+RUN cd /tmp/build; \
 	ninja install
 
 FROM alpine:3.10.2
