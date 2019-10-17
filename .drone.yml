@@ -21,7 +21,7 @@ steps:
         from_secret: repo_username
       password:
         from_secret: repo_password
-triggers:
+trigger:
   branch:
     - master
 ---
@@ -48,7 +48,7 @@ steps:
       password:
         from_secret: repo_password
 
-triggers:
+trigger:
   branch:
     - master
 ---
@@ -72,7 +72,7 @@ steps:
         from_secret: repo_password
       auto_tags: true
 
-triggers:
+trigger:
   event:
     - tag
 
@@ -93,7 +93,7 @@ steps:
         from_secret: repo_password
       auto_tags: true
 
-triggers:
+trigger:
   event:
     - tag
   
