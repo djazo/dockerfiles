@@ -8,22 +8,41 @@ platform:
   arch: amd64
 
 steps:
-  - name: version
+  - name: prepare
     image: busybox
     commands:
+      - mkdir -p /cache/${DRONE_REPO}/docker
       - cat avr-toolchain/VERSION > .tags
+    volumes:
+      - name: cache
+        path: /cache
+        
   - name: build-beta
     image: plugins/docker
     settings:
       repo: embeddedreality/avr-toolchain
       dockerfile: avr-toolchain/Dockerfile
+      use_cache: true
       username:
         from_secret: repo_username
       password:
         from_secret: repo_password
+    volumes:
+      - name: docker
+        path: /var/lib/docker
+        
 trigger:
   branch:
     - master
+
+volumes:
+  - name: cache
+    host:
+      path: /var/cache
+  - name: docker
+    host:
+      path: /var/cache/${DRONE_REPO}/docker
+
 ---
 kind: pipeline
 type: docker
@@ -34,23 +53,42 @@ platform:
   arch: amd64
 
 steps:
-  - name: version
+  - name: prepare
     image: busybox
     commands:
+      - mkdir -p /cache/${DRONE_REPO}/docker
       - cat arm-toolchain/VERSION > .tags
+    volumes:
+      - name: cache
+        path: /cache
+        
   - name: build-beta
     image: plugins/docker
     settings:
       repo: embeddedreality/arm-toolchain
       dockerfile: arm-toolchain/Dockerfile
+      use_cache: true
       username:
         from_secret: repo_username
       password:
         from_secret: repo_password
+    volumes:
+      - name: docker
+        path: /var/lib/docker
 
 trigger:
   branch:
     - master
+
+volumes:
+  - name: cache
+    host:
+      path: /var/cache
+  - name: docker
+    host:
+      path:
+        /var/cache/${DRONE_REPO}/docker
+        
 ---
 kind: pipeline
 type: docker
@@ -61,39 +99,148 @@ platform:
   arch: amd64
 
 steps:
+  - name: prepare
+    image: busybox
+    commands:
+      - mkdir -p /cache/${DRONE_REPO}/docker
+    volumes:
+      - name: cache
+        path: /cache
+        
   - name: build-release
     image: plugins/docker
     settings:
       repo: embeddedreality/avr-toolchain
       dockerfile: avr-toolchain/Dockerfile
+      use_cache: true
       username:
         from_secret: repo_username
       password:
         from_secret: repo_password
       auto_tags: true
+    volumes:
+      - name: docker
+        path: /var/lib/docker
 
 trigger:
   event:
     - tag
 
+volumes:
+  - name: cache
+    host:
+      path: /var/cache
+  - name: docker
+    host:
+      path: /var/cache/${DRONE_REPO}/docker
+      
 ---
 kind: pipeline
 type: docker
 name: arm-release
 
 steps:
+  - name: prepare
+    image: busybox
+    commands:
+      - mkdir -p /cache/${DRONE_REPO}/docker
+    volumes:
+      - name: cache
+        path: /cache
+      
   - name: build-release
     image: plugins/docker
     settings:
       repo: embeddedreality/arm-toolchain
       dockerfile: arm-toolchain/Dockerfile
+      use_cache: true
       username:
         from_secret: repo_username
       password:
         from_secret: repo_password
       auto_tags: true
+    volumes:
+      - name: docker
+        path: /var/lib/docker
 
 trigger:
   event:
     - tag
-  
+
+volumes:
+  - name: cache
+    host:
+      path: /var/cache
+  - name: docker
+    host:
+      path: /var/cache/${DRONE_REPO}/docker
+
+---
+kind: pipeline
+type: docker
+name: avr-testbuild
+
+setup:
+  - name: prepare cache
+    image: busybox
+    commands:
+      - mkdir -p /cache/${DRONE_REPO}/docker
+  - name: test
+    image: plugins/docker
+    settings:
+      repo: embeddedreality/avr-toolchain
+      dockerfile: avr-toolchain/Dockerfile
+      dry_run: true
+    volumes:
+      - name: docker
+        path: /var/lib/docker
+
+trigger:
+  branch:
+    exclude:
+      - master
+
+volumes:
+  - name: cache
+    host:
+      path: /var/cache
+  - name: docker
+    host:
+      path: /var/cache/${DRONE_REPO}/docker
+
+---
+kind: pipeline
+type: docker
+name: arm-testbuild
+
+steps:
+  - name: prepare cache
+    image: busybox
+    commands:
+      - mkdir -p /cache/${DRONE_REPO}/docker
+    volumes:
+      - name: cache
+        path: /cache
+  - name: test
+    image: plugins/docker
+    settings:
+      repo: embeddedreality/arm-toolchain
+      dockerfile: arm-toolchain/Dockerfile
+      cache_from: "embeddedreality/arm-toolchain:latest"
+      dry_run: true
+    volumes:
+      - name: docker
+        path: /var/lib/docker
+
+trigger:
+  branch:
+    exclude:
+      - master
+
+volumes:
+  - name: cache
+    host:
+      path: /var/cache
+  - name: docker
+    host:
+      path: /var/cache/${DRONE_REPO}/docker
