@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: avr
+name: avr-beta
 
 platform:
   os: linux
@@ -21,11 +21,13 @@ steps:
         from_secret: repo_username
       password:
         from_secret: repo_password
-
+triggers:
+  branch:
+    - master
 ---
 kind: pipeline
 type: docker
-name: arm
+name: arm-beta
 
 platform:
   os: linux
@@ -45,4 +47,53 @@ steps:
         from_secret: repo_username
       password:
         from_secret: repo_password
-    
+
+triggers:
+  branch:
+    - master
+---
+kind: pipeline
+type: docker
+name: avr-release
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: build-release
+    image: plugins/docker
+    settings:
+      repo: embeddedreality/avr-toolchain
+      dockerfile: avr-toolchain/Dockerfile
+      username:
+        from_secret: repo_username
+      password:
+        from_secret: repo_password
+      auto_tags: true
+
+triggers:
+  event:
+    - tag
+
+---
+kind: pipeline
+type: docker
+name: arm-release
+
+steps:
+  - name: build-release
+    image: plugins/docker
+    settings:
+      repo: embeddedreality/arm-toolchain
+      dockerfile: arm-toolchain/Dockerfile
+      username:
+        from_secret: repo_username
+      password:
+        from_secret: repo_password
+      auto_tags: true
+
+triggers:
+  event:
+    - tag
+  
